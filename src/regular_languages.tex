@@ -67,7 +67,7 @@ Let $N = (Q_n, \Sigma, \delta_n, q_0, F_n)$ be an NFA; let us construct a DFA $D
 \begin{itemize}
 	\item $Q_d \subseteq \mathscr{P}(Q_n)$;
 	\item $\delta_d(S, a) = \cup_i \delta_n(p_1, a)$ where $p_i \in S \in Q_d$;
-	\item $F_d = \left\{S \middle| S \in Q_d; S \cap F_n \neq 0 \right\}$.
+	\item $F_d = \left\{S \middle| S \in Q_d; S \cap F_n \neq \emptyset \right\}$.
 \end{itemize}
 By construction $L(D) = L(N)$, so $NFA \equiv DFA$
 
@@ -131,7 +131,7 @@ Let $N = (Q_n, \Sigma, \delta_n, q_0, F_n)$ be an $\varepsilon\text{-NFA}$; let 
 \begin{itemize}
 	\item $Q_d \subseteq \mathscr{P}(Q_n)$;
 	\item $\delta_d(S, a) = \varepsilon\text{-closure}(\cup_i \delta_n(p_i, a))$ where $p_i \in S \in Q_d$;
-	\item $F_d \left\{S \middle| S \in Q_d; S \cap F_n \neq 0\right\}$
+	\item $F_d \left\{S \middle| S \in Q_d; S \cap F_n \neq \emptyset\right\}$
 \end{itemize}
 By construction $L(D) = L(N)$.
 
