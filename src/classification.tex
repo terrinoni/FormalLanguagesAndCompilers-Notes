@@ -19,15 +19,15 @@ Grammars that produce the same languages are said ``equivalent''.
 
 \section{Types of Grammars}
 \begin{description}
-	\item[Type 0 grammars] (phase-structure)\\
+	\item[Type 0 grammars] (phase-structure)
 		$$
 			P = \left\{\alpha \to \beta \middle| \alpha \in V^+; \alpha \notin T^+; \beta \in V^\ast \right\}
 		$$
-	\item[Type 1 grammars] (context-sensitive)\\
+	\item[Type 1 grammars] (context-sensitive)
 		$$
 			P = \left\{\alpha \to \beta \middle| \alpha \in V^+; \alpha \notin T^+; \beta \in V^+; |\alpha| \leq |\beta| \right\}
 		$$
-	\item[Type 2 grammars] (context-free)\\
+	\item[Type 2 grammars] (context-free)
 		$$
 			P = \left\{A \to \beta \middle| A \in N; \beta \in V^+ \right\}
 		$$
@@ -40,16 +40,16 @@ $$
 \begin{description}
 	\item[Type 3 grammars] (right/left - linear)\\
 	\begin{itemize}
-		\item Right-Linear grammars\\
+		\item Right-Linear grammars
 			$$
 				P = \left\{A \to xB, A \to x \middle| A, B \in N; x \in T^+ \right\}
 			$$
-		\item Left-Linear grammars\\
+		\item Left-Linear grammars
 			$$
 				P = \left\{A \to Bx, A \to x \middle| A, B \in N; x \in T^+ \right\}
 			$$
 	\end{itemize}
-	\item[Type 3 grammars] (right/left - regular)\\
+	\item[Type 3 grammars] (right/left - regular)
 	\begin{itemize}
 		\item Right-Regular grammars
 			$$

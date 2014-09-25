@@ -1,0 +1,36 @@
+\section{Deterministic Finite Automata (DFA)}
+A DFA is a 5-tuple $A = (Q, \Sigma, \delta, q_0, F)$ where:
+\begin{description}
+	\item[$Q$] finite (non-empty) set of states;
+	\item[$\Sigma$] alphabet of input symbols;
+	\item[$\delta$] transition function:
+		$$
+			\delta: Q \times \Sigma \to Q
+		$$
+	\item[$q_0$] start state:
+		$$
+			q_0 \in Q
+		$$
+	\item[$F$] set of final states:
+		$$
+			F \subseteq Q
+		$$
+\end{description}
+
+\subsection{Transition Table}
+Transitional Table is a tabular representation of this transition function.
+
+\subsection{Transition Diagram}
+Transitional Diagram is a graph where:
+\begin{itemize}
+	\item for each state in the automaton there a node;
+	\item for each transition $\delta(p, a) = q$ there is an arc from $p$ to $q$ labelled $a$.
+\end{itemize}
+The start state has an entering non-labelled arc and the final states are marked by a double circle.
+
+\section{Non-Deterministic Finite Automata (NFA)}
+An NFA is a 5-tuple 
+
+\section{Equivalence of NFA and DFA}
+
+\section{From Finite Automata to Regular Expression}
