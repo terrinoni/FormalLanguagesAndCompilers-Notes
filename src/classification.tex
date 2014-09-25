@@ -1,14 +1,14 @@
 \section{Grammars}
 A grammar is a 4-tuple $G = (N, T, P, S)$ where:
 \begin{description}
-	\item[N] alphabet of \underline{non-terminal} symbols;
-	\item[T] alphabet of \underline{terminal} symbols:
+	\item[$N:$] alphabet of \underline{non-terminal} symbols;
+	\item[$T:$] alphabet of \underline{terminal} symbols:
 	\begin{itemize}
 		\item $N \cap T = 0$ (two alphabets are disjoined),
 		\item $V = N \cup T$ (alphabet of the grammar);
 	\end{itemize}
-	\item[P] finite set of rules (productions);
-	\item[S] start (non-terminal) symbol.
+	\item[$P:$] finite set of rules (productions);
+	\item[$S:$] start (non-terminal) symbol.
 \end{description}
 
 A language produced by $G = (N, T, P, S)$ is:
@@ -38,7 +38,7 @@ $$
 	P = \left\{A \to xBy, A \to x \middle| A, B \in N; x,y \in T^+ \right\}
 $$
 \begin{description}
-	\item[Type 3 grammars] (right/left - linear)\\
+	\item[Type 3 grammars] (right/left - linear)
 	\begin{itemize}
 		\item Right-Linear grammars
 			$$
