@@ -1,0 +1,13 @@
+\section{Grammars}
+A grammar is a 4-tuple $G = (N, T, P, S)$ where:
+\begin{description}
+	\item[N] alphabet of non-terminal symbols;
+	\item[T] alphabet of terminal symbols;
+	\item[P] finite set of rules (productions);
+	\item[S] start (non-terminal) symbol.
+\end{description}
+
+A language produced by $G = (N, T, P, S)$ is:
+$$
+	L(G) = \left\{w \middle| w \in T\ast ; S \Rightarrow\ast w\right\}
+$$
