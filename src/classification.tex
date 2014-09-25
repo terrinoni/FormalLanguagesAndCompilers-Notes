@@ -1,13 +1,63 @@
 \section{Grammars}
 A grammar is a 4-tuple $G = (N, T, P, S)$ where:
 \begin{description}
-	\item[N] alphabet of non-terminal symbols;
-	\item[T] alphabet of terminal symbols;
+	\item[N] alphabet of \underline{non-terminal} symbols;
+	\item[T] alphabet of \underline{terminal} symbols:
+	\begin{itemize}
+		\item $N \cap T = 0$ (two alphabets are disjoined),
+		\item $V = N \cup T$ (alphabet of the grammar);
+	\end{itemize}
 	\item[P] finite set of rules (productions);
 	\item[S] start (non-terminal) symbol.
 \end{description}
 
 A language produced by $G = (N, T, P, S)$ is:
 $$
-	L(G) = \left\{w \middle| w \in T\ast ; S \Rightarrow\ast w\right\}
+	L(G) = \left\{w \middle| w \in T^\ast; S \Rightarrow^\ast w\right\}
 $$
+Grammars that produce the same languages are said ``equivalent''.
+
+\section{Types of Grammars}
+\begin{description}
+	\item[Type 0 grammars] (phase-structure)\\
+		$$
+			P = \left\{\alpha \to \beta \middle| \alpha \in V^+; \alpha \notin T^+; \beta \in V^\ast \right\}
+		$$
+	\item[Type 1 grammars] (context-sensitive)\\
+		$$
+			P = \left\{\alpha \to \beta \middle| \alpha \in V^+; \alpha \notin T^+; \beta \in V^+; |\alpha| \leq |\beta| \right\}
+		$$
+	\item[Type 2 grammars] (context-free)\\
+		$$
+			P = \left\{A \to \beta \middle| A \in N; \beta \in V^+ \right\}
+		$$
+\end{description}
+
+\section{Linear Grammars}
+$$
+	P = \left\{A \to xBy, A \to x \middle| A, B \in N; x,y \in T^+ \right\}
+$$
+\begin{description}
+	\item[Type 3 grammars] (right/left - linear)\\
+	\begin{itemize}
+		\item Right-Linear grammars\\
+			$$
+				P = \left\{A \to xB, A \to x \middle| A, B \in N; x \in T^+ \right\}
+			$$
+		\item Left-Linear grammars\\
+			$$
+				P = \left\{A \to Bx, A \to x \middle| A, B \in N; x \in T^+ \right\}
+			$$
+	\end{itemize}
+	\item[Type 3 grammars] (right/left - regular)\\
+	\begin{itemize}
+		\item Right-Regular grammars
+			$$
+				P = \left\{A \to aB, A \to a \middle| A, B \in N; a \in T \right\}
+			$$
+		\item Left-Regular grammars
+			$$
+				P = \left\{A \to Ba, A \to a \middle| A, B \in N; a \in T \right\}
+			$$
+	\end{itemize}
+\end{description}

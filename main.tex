@@ -1,0 +1,88 @@
+\documentclass[pdfa,cucitura]{toptesi}
+\hypersetup{%
+	pdfpagemode={UseOutlines},
+	bookmarksopen,
+	pdfstartview={FitH},
+	colorlinks,
+	linkcolor={blue},
+	citecolor={red},
+	urlcolor={blue}
+}
+
+\usepackage[latin1]{inputenc}
+
+% exact placing figures
+\usepackage{float}
+
+% insert eps files
+\usepackage{epstopdf}
+
+% cool tables
+\usepackage{booktabs}
+\usepackage{rotating}
+
+\selectlanguage{english}
+
+\ateneo{Politecnico di Torino}
+\titolo{Building Trustworthiness Into Marketplaces}
+
+\corsodilaurea{Computer Engineering}
+
+\candidato{Marco \textsc{Terrinoni}}
+\relatore{prof.\ Antonio Lioy}
+%\tutoreaziendale{Stuart Short}
+
+\sedutadilaurea{\textsc{Anno~accademico} 2013-2014}
+\logosede{img/logopolito}
+
+\input{utils/commands.tex}
+
+\begin{document}
+\english
+
+\errorcontextlines=9
+
+\expandafter\ifx\csname StileTrieste\endcsname\relax
+%\frontespizio
+\else
+	\paginavuota
+	\begin{dedica}
+		To my grandparents
+
+		\textdagger\ You will always live in my memories
+	\end{dedica}
+	\tomo
+\fi
+
+\sommario
+\input{src/summary.tex}
+
+\indici
+
+\mainmatter
+
+\part{Formal Languages}
+
+\chapter{Classification (FLC)}
+\input{src/classification.tex}
+
+\chapter{Regular Languages (RL)}
+\input{src/regular_languages.tex}
+
+\chapter{Context-Free Languages (CFL)}
+
+\chapter{Turing Machines (TM)}
+
+\part{Compilers}
+
+\chapter{Compiler Structure (CS)}
+
+\chapter{Lexical Analysis (LA)}
+
+\chapter{Syntax Analysis (SA)}
+
+\chapter{Syntax-Directed Translation (SDT)}
+
+\chapter{Semantic Analysis and Intermediate-Code Generation (SA/ICG)}
+
+\end{document}
