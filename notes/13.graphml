@@ -19,7 +19,7 @@
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="30.0" width="62.0" x="373.0" y="135.0"/>
-          <y:Fill color="#FFCC00" transparent="false"/>
+          <y:Fill hasColor="false" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="custom" textColor="#000000" visible="true" width="48.6953125" x="6.65234375" y="5.6494140625">Scanner<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
@@ -37,7 +37,7 @@
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="30.0" width="62.0" x="373.0" y="225.0"/>
-          <y:Fill color="#FFCC00" transparent="false"/>
+          <y:Fill hasColor="false" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="custom" textColor="#000000" visible="true" width="39.34375" x="11.328125" y="5.6494140625">Parser<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
@@ -55,7 +55,7 @@
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="30.0" width="113.0" x="347.5" y="315.0"/>
-          <y:Fill color="#FFCC00" transparent="false"/>
+          <y:Fill hasColor="false" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="custom" textColor="#000000" visible="true" width="98.705078125" x="7.1474609375" y="5.6494140625">Rest of Front-End<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
@@ -73,7 +73,7 @@
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="30.0" width="86.31999999999994" x="493.0" y="225.0"/>
-          <y:Fill color="#FFCC00" transparent="false"/>
+          <y:Fill hasColor="false" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="custom" textColor="#000000" visible="true" width="77.365234375" x="4.477382812499968" y="5.6494140625">Symbol Table<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
