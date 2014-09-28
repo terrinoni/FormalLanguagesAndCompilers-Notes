@@ -56,12 +56,10 @@ NB: a DFA is a special case of NFA.
 \begin{figure}[H]
     \centerline{\includegraphics[width=0.6\textwidth]{img/1.pdf}}
 \end{figure}
-$$
-	Q_1 = \left\{q_2, q_3, q_4\right\}
-$$
-$$
-	Q_2 = \left\{q_5, q_6, q_7, q_8, q_9\right\}
-$$
+\begin{align*}
+	Q_1 &= \left\{q_2, q_3, q_4\right\}\\
+	Q_2 &= \left\{q_5, q_6, q_7, q_8, q_9\right\}
+\end{align*}
 
 Let $N = (Q_n, \Sigma, \delta_n, q_0, F_n)$ be an NFA; let us construct a DFA $D = (Q_d, \Sigma, \delta_d, \left\{q_0\right\}, F_d)$ where:
 \begin{itemize}
