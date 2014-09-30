@@ -101,7 +101,7 @@ Function $gen(three-address instruction)$ constructs a three-address instruction
 Function $top.gen(id.lexeme)$ retrieve the entry for $id.lexeme$ in the data area of the current $(top)$ symbol table.
 
 \section{Translation of Boolean Expression}
-$AND(&&)$ and $OR(||)$ operators are left associative; $NOT(!)$ takes precedence over $AND$, which takes precedence over $OR$.
+$AND(\&\&)$ and $OR(||)$ operators are left associative; $NOT(!)$ takes precedence over $AND$, which takes precedence over $OR$.
 
 \section{Back-Patching}
 Function $makelist(i)$ creates a new list of jumps containing only the index $i$ into the sequence of instructions (returns a pointer to the newly created list).

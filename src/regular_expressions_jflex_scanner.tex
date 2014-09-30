@@ -1,0 +1,265 @@
+\section{Languages}
+\begin{description}
+	\item[Lexicon] $\to$ scanner JFlex: lexical analyser;
+	\item[Syntax] $\to$ parser CUP: syntax and semantic analyser;
+	\item[Semantic] $\to$ understanding the meaning of expressions.
+\end{description}
+
+\section{JFlex: a Lexical Analysers Generator}
+Transforming regular expressions in deterministic finite state automata and implementing them is a long and mechanical process; hence, a lexical analyser (or scanner) automatic generator is often used.
+
+JFlex is a generator which takes as input a set of regular expressions and associated actions, and produces as output a Java program that matches a given input against them.
+
+\subsection{Regular Expressions in JFlex}
+\begin{itemize}
+	\item Regular expressions describe sequences of ASCII characters using a set of operators;
+	\item letters and numbers in the input string are described by the characters themselves;
+	\item non-alphabetical characters must be written in quotation marks, to avoid ambiguities with operators;
+	\item non-alphabetical characters can be also preceded by the \code{\\};
+	\item character classes are identified by square brackets \code{[]}, in which the \code{-} character is used to describe a range of characters:
+	\begin{itemize}
+		\item \code{[0-9]} $\to$ digit between 0 and 9,
+		\item \code{[a-z]} $\to$ lower case letter,
+		\item \code{[a-zA-Z0-9]} $\to$ both lower and upper case letter and number;
+	\end{itemize}
+	\item to include the character \code{-} in a character class, it must be either the first or the last character within the brackets;
+	\item the character \code{^} at the beginning of a character class identifies a ``negated character class'' (example: \code{[^0-9]} $\to$ any character except digits);
+	\item the symbol \code{.} (dot) identifies any character except newline;
+	\item the newline character is described by the following regular expression: \code{\\n\|\\r\|\\r\\n} (note: \code{\\n\|\\r\|\\r\\n} $\to$ one newline only, \code{[\\n\\r]+} $\to$ one or more newlines);
+	\item the symbol \code{\\t} identifies the tabulation character;
+	\item the operator \code{?} indicates that the preceding expression is optional;
+	\item the operator \code{*} indicates that the preceding expression can be repeated 0 or more times;
+	\item the operator \code{+} indicates that the preceding expression can be repeated 1 or more times;
+	\item the operator \code{\{n\}} represents $n$ repetitions of the precedent regular expression (example: \code{ab\{3\}c} $\to abbbc$);
+	\item the operator \code{\{n, m\}} represents a repetition of the regular expression between a minimum of $n$ and a maximum of $m$ (example: \code{ab\{2,4\}c} $\to abbc$, $abbbc$, or $abbbbc$);
+	\item the operator \code{\|} represents two alternative expressions (example: \code{ab\|bc} $\to ab$ or $bc$);
+	\item parentheses are used to express/modify operators priority, some examples:
+	\begin{itemize}
+		\item unsigned integers: \code{[0-9]+}
+		\item unsigned integers without leading zeros: \code{[1-9][0-9]*}
+		\item signed integers: \code{("+"\|"-")?[0-9]+}
+		\item floating point number: \code{("+"\|"-")?([1-9][0-9]*"."[0-9]*)\|("."[0-9]+)\|(0"."[0-9]*)}
+	\end{itemize}
+\end{itemize}
+
+\subsection{Structure of a JFlex Source File}
+A JFlex source file has three distinct sections separated by \code{\%\%}:
+\begin{itemize}
+	\item the first section is called \underline{Code Section}, it contains the user code and can be empty;
+	\item the second section is the \underline{Declaration Section} and contains option and declarations;
+	\item the third section is called \underline{Rules Section} and contains the lexical rules in the form of \code{regular expression - action} pairs.
+\end{itemize}
+\begin{lstlisting}[frame=single]
+	code section
+	%%
+	declarations section
+	%%
+	rules section
+\end{lstlisting}
+
+\subsubsection{Code Section}
+All the code lines present in this section are copied without any modification in the generated scanner.
+Usually, import statement for Java libraries that will be used in the next sections are inserted here.
+Examples:
+\begin{lstlisting}
+	import java.io.*;
+	import java_cup.runtime.*;
+\end{lstlisting}
+
+\subsubsection{Declaration Section}
+To simplify the usage of complex or repetitive regular expressions, it is possible to define identifiers for sub-expressions.
+Example: \code{integer = [+-]?[1-9][0-9]*}
+
+The sub-expression can be then used in the rules section, writing its name between braces.
+Example: \code{\{integer\} \{System.out.print("integer found");\}}
+
+Java code can be included in the declarations section by writing it between \code{\%\{} and \code{\%\}}
+
+\subsubsection{Rules Section}
+IN JFlex, each regular expression is associated to an action, which is executed when the input matches the regular expression.
+Actions are constituted by snippets of Java code, written between braces.
+The simplest action consists in ignoring the matched string and is expressed by an empty action $\to$ \code{\{;\}}.
+Example: \code{\\n\|\\r\|\\r\\n \{System.out.println("newline found")\};}
+
+Scanner methods and fields accessible in actions:
+\begin{description}
+	\item[String yytext()]\mbox{} \\
+	returns the matched string (that is saved into an internal buffer);
+	\item[int yylength()]\mbox{} \\
+	the number matched character is returned;
+	\item[char yycharat(int pos)]\mbox{} \\
+	returns the character at position \code{pos};
+	\item[int yyline, int yycolumn]\mbox{} \\
+	contains the current line and column of input file respectively (those variables have a meaningful value only if \code{\%line} and \code{\%column} directives are declared);
+	\item[int yychar]\mbox{} \\
+	contains the current character count in the input (starting with \code{0}, only active with the \code{\%} char directive).
+\end{description}
+Example:
+\begin{lstlisting}[frame=single]
+	%%
+	euro = [1-9][0-9]*"."[0-9][0-9] | 0"."[0-9][0-9]"
+	lire = [1-9][0-9]*
+	%%
+	{euro} {System.out.println("Euro: " + yytext());}
+	{lire} {System.out.println("Lire: " + yytext());}
+\end{lstlisting}
+Example:
+\begin{lstlisting}
+	%%
+	%class Lexer
+	%standalone
+	euro ...
+\end{lstlisting}
+\code{\%standalone} generates the main method.
+The main method accepts as input the list of file to be scanned.
+The default JFlex behaviour with \code{\%standalone} option is regular expression to manage them.
+
+\code{\%class Lexer}: the generated class is named \code{Lexer.java}
+
+\subsubsection{Compiling Steps}
+\begin{lstlisting}
+	jflex <filename>.jflex
+	javac Lexer.java
+	java Lexer
+\end{lstlisting}
+
+\subsection{Ambiguous Source Rules}
+JFlex can handle ambiguous specifications.
+There are two main sources of ambiguity:
+\begin{itemize}
+	\item the initial part of character sequence matched by one regular expression is also matched by another regular expression;
+	\item the same character sequence is matched by two distinct regular expressions.
+\end{itemize}
+The first case is handled by always selecting the regular expression that gives the longest match.
+Among rules that matched the same number of characters, the rule specified first in the source file is preferred.
+Example:
+\begin{lstlisting}[frame=single]
+	%%
+	%%
+	for {System.out.println("FOR_CMD");}
+	format {System.out.println("FORMAT_CMD");}
+	[a-z]+ {System.out.println("GENERIC_ID");}
+\end{lstlisting}
+Given the input string ``format'', the scanner will print ``FORMAT\_CMD'':
+\begin{itemize}
+	\item preferring the second rule to the first because it gives a longer match;
+	\item preferring the second rule to the third because it comes before in the source file.
+\end{itemize}
+
+Given the rules for handling ambiguous specifications, when analysing a programming language it is necessary to define first the rules for keywords and then for identifiers.
+
+The longest match rule can result in unwanted behaviour.
+
+Example: \code{\\".*"\\ \{System.out.println("Quoted string");\}} tries to match the second single quotation mark as far as possible; hence, given the following input string \emph{``first'' quoted string here, ``second'' here}, it will match 36 characters instead of 7.
+Better regular expressions are the following:
+\begin{lstlisting}
+	\"[^"]+\"
+	\"~\"
+\end{lstlisting}
+The last one is particularly useful in case of comments for programming languages.
+
+\section{Context}
+It could be useful to limit the validity of a regular expression to a determined context.
+There are different mechanism to specify sensitivity to the right context (i.e., the string that precedes the sequence being matched) and to the left context (i.e., the string that follows the sequence being matched).
+
+Special techniques are used to handle the beginning and the end of a line.
+
+\subsubsection{Beginning and End of a Line}
+The character \code{^} at the beginning of a regular expression indicates that the sequence must be found at the beginning of the line. This means that either the character sequence is at the beginning of the input stream, or that the last character previously read was a newline.
+
+The character \code{\$} at the end of a regular expression indicates that the sequence must be followed by a newline character.
+By default, the newline is not matched by the regular expression and thus must be matched by another rule.
+Example:
+\begin{itemize}
+	\item \code{end\$} $\to$ the characters `e', `n', `d' at the end of the line;
+	\item \code{\\r\|\\n\|\\r\\n} $\to$ matches the newline
+\end{itemize}
+
+\subsection{Sensitivity to the Right Context}
+The binary operator \code{\/} separates a regular expression from its right context.
+Example:
+\begin{itemize}
+	\item[] \emph{ab/cd} $\to$ it matches the string ``ab'', but only if it is followed by the string ``cd''
+	\item[] \code{ab\$} $\equiv$ \code{ab\/(\\n\|\\r\|\\r\\n)}
+\end{itemize}
+The character forming the tight context are read from the input file, but are not part of the matched string.
+A suitable buffer is defined by JFlex to hold such characters.
+
+\section{Start Condition (inclusive states)}
+Rule starting with \code{<state>} are active only when the scanner is in the state ``\code{state}''.
+Possible states must be declared in the declarations section using the \code{\%state} keyword.
+The default state is \code{YYINITIAL}.
+The scanner enters a state when the following action is executed: \code{yybegin(state);}.
+When a state is activated, the state rules are added (inclusive or) to the other scanner base rules.
+A state is active until another state is activated.
+To return to the initial condition, one must activate the initial state by means of the statement \code{yybegin(YYINITIAL);}.
+A rule can be preceded by one or more state names, separated by a comma, to indicate that it is active in each of the states.
+Example:
+\begin{lstlisting}
+	%%
+	%state comment
+	%%
+	<comment>\$[a-z-A-Z]+[-+] {process(yytext());}
+	"//" {yybegin(comment);}
+	\n|\r|\r\n {yybegin(YYINITIAL);}
+	" " {;}
+	\t {;}
+\end{lstlisting}
+
+\section{Combining More Than One Scanner (exclusive states)}
+A set of rules can be grouped within an exclusive state as well.
+When the scanner enters in an exclusive state:
+\begin{itemize}
+	\item default rules are disabled;
+	\item only the rules explicitly defined for the state are active.
+\end{itemize}
+In this way, ``mini-scanner'' that deals with special sections of the input stream, such as comments or strings, can be defined.
+The \code{\%xstate} keyword defines an exclusive state.
+Example: this scanner recognizes and eliminates C comments, while counting the number of lines.
+\begin{lstlisting}
+	%%
+	%standalone
+	%xstate comment
+	%{
+		public int line_num = 1;
+		public int line_num_comment = 1;
+	%}
+
+	nl = \n|\r|\r\n
+
+	%%
+	{nl} {++line_num;}
+	"/*" {yybegin(comment);}
+	<comment>[^*\r\n]* {;}
+	<comment>"*"+[^\/\r\n]* {;}
+	<comment>{nl} {++line_num_comment;}
+	<comment>"*"+"/" {yybegin(YYINITIAL);}
+\end{lstlisting}
+
+\section{End of File Rule}
+The special rule \code{<<EOF>>} introduces the action to be performed when the end of file is reached.
+Example:
+\begin{lstlisting}
+	<<EOF>> {
+		System.out.println(line_numm + " " + line_num_comment);
+		return YYEOF;
+	}
+\end{lstlisting}
+This rule can be useful, coupled with start conditions, to detect unbalanced parentheses (or braces, brackets, quotation marks, \ldots).
+Example:
+\begin{lstlisting}
+	\" {yybegin(quote);}
+	...
+	<quote><<EOF>> {System.out.println("EOF in string");}
+\end{lstlisting}
+
+\section{Parser and Syntax Analyser}
+Given a non-ambiguous grammar and a sequence of input symbols, a parser is a program that verifies whether the sequence can be generated by means of a derivation from the grammar.
+
+A syntax analyser (parser) is a program capable of associating to the input sequence the correct parse tree.
+Parsers can be classified as:
+\begin{description}
+	\item[Top-Down] (root $\to$ leaves);
+	\item[Bottom-Up] (leaves $\to$ root).
+\end{description}
+CUP is a bottom-up parser.
