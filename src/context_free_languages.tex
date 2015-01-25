@@ -1,10 +1,10 @@
 \section{Parse Trees}
 A parse tree for a context-free grammar (CFG) $G = (N, T, P, S)$ is a tree where:
 \begin{itemize}
-	\item the root is labelled by the start symbol;
-	\item each interior node is labelled by a symbol in $N$;
-	\item each leaf is labelled by a symbol in $N \cup T \cup \left\{\varepsilon\right\}$;
-	\item an interior node labelled by $A$ has a children labelled by $x_1, x_2, \ldots, x_n$ only if $A \to x_1, x_2, \ldots, x_n$ is a production of $P$.
+    \item the root is labelled by the start symbol;
+    \item each interior node is labelled by a symbol in $N$;
+    \item each leaf is labelled by a symbol in $N \cup T \cup \left\{\varepsilon\right\}$;
+    \item an interior node labelled by $A$ has a children labelled by $x_1, x_2, \ldots, x_n$ only if $A \to x_1, x_2, \ldots, x_n$ is a production of $P$.
 \end{itemize}
 Yield of a parse tree is a string obtained by concatenating the labels of the leaves.
 
@@ -21,23 +21,23 @@ A context-free grammar is \emph{ambiguous} if there is at least one string in it
 \section{Eliminating Useless Symbols in a Context-Free Grammar}
 A symbol $X$ is useful for a $CFG = (N, T, P, S)$ if there is some derivations $S \Rightarrow^\ast aX\beta \Rightarrow^\ast w \in T^\ast$.
 \begin{itemize}
-	\item a useful symbol $X$ generates a non-empty languages: $X \Rightarrow^\ast x \in T^\ast$;
-	\item a useful symbol $X$ is reachable: $S \Rightarrow^\ast \alpha X\beta$.
+    \item a useful symbol $X$ generates a non-empty languages: $X \Rightarrow^\ast x \in T^\ast$;
+    \item a useful symbol $X$ is reachable: $S \Rightarrow^\ast \alpha X\beta$.
 \end{itemize}
 Eliminating useless symbols from a grammar will not change the generated language:
 \begin{enumerate}
-	\item eliminate symbols generating an empty language;
-	\item eliminate unreachable symbols.
+    \item eliminate symbols generating an empty language;
+    \item eliminate unreachable symbols.
 \end{enumerate}
 \subsubsection{Finding Symbols Generating Non-Empty Languages}
 \begin{itemize}
-	\item every symbol of $T$ generates a non-empty language;
-	\item if $A \to \alpha$ and all symbols in $\alpha$ generate a non-empty language, then $A$ generates a non-empty language.
+    \item every symbol of $T$ generates a non-empty language;
+    \item if $A \to \alpha$ and all symbols in $\alpha$ generate a non-empty language, then $A$ generates a non-empty language.
 \end{itemize}
 \subsubsection{Finding Reachable Symbols}
 \begin{itemize}
-	\item the start symbol $S$ is reachable;
-	\item if $A \to \alpha$ and $A$ is reachable, all symbols in $\alpha$ are reachable.
+    \item the start symbol $S$ is reachable;
+    \item if $A \to \alpha$ and $A$ is reachable, all symbols in $\alpha$ are reachable.
 \end{itemize}
 
 \section{$\varepsilon\text{-productions}$ in CFG}
@@ -45,64 +45,64 @@ According to the Chomsky classification, only \emph{Type 0 grammars} can have $\
 
 A context-free grammar $G_1$ with $\varepsilon\text{-productions}$ can be transformed into an equivalent CFG $G_2$ without $\varepsilon\text{-productions}$:
 $$
-	L(G_2) = L(G_1) - \left\{\varepsilon\right\}
+    L(G_2) = L(G_1) - \left\{\varepsilon\right\}
 $$
 If $A \to x_1, \ldots, x_i, \ldots, x_n$ is in $P_1$ and $x_i \Rightarrow^\ast \varepsilon$, then $P_2$ will contain $A \to x_1 \ldots x_i \ldots x_n$ and $A \to x_1 \ldots x_{i - 1} x_{i + 1} \ldots x_n$.
 
 \section{Pushdown Automata (PDA)}
 A PDA is a 7-tuple $P = (Q, \Sigma, \Gamma, \delta, q_0, Z_0, F)$ where:
 \begin{description}
-	\item[$Q:$] finite (non-empty) set of states;
-	\item[$\Sigma:$] alphabet of input symbols;
-	\item[$\Gamma:$] alphabet of stack symbols;
-	\item[$\delta:$] transition function
-	$$
-		\delta: Q \times (\Sigma \cup \left\{\varepsilon\right\}) \times \Gamma \to \left\{(p, \gamma) \middle| p \in Q; \gamma \in \Gamma^\ast \right\}
-	$$
-	\item[$q_0:$] start state ($q_0 \in Q$);
-	\item[$Z_0:$] start stack symbol ($Z_0 \in \Gamma$);
-	\item[$F:$] set of final states ($F \subseteq Q$).
+    \item[$Q:$] finite (non-empty) set of states;
+    \item[$\Sigma:$] alphabet of input symbols;
+    \item[$\Gamma:$] alphabet of stack symbols;
+    \item[$\delta:$] transition function
+    $$
+        \delta: Q \times (\Sigma \cup \left\{\varepsilon\right\}) \times \Gamma \to \left\{(p, \gamma) \middle| p \in Q; \gamma \in \Gamma^\ast \right\}
+    $$
+    \item[$q_0:$] start state ($q_0 \in Q$);
+    \item[$Z_0:$] start stack symbol ($Z_0 \in \Gamma$);
+    \item[$F:$] set of final states ($F \subseteq Q$).
 \end{description}
 
 \subsection{Transitions of a PDA}
 \begin{itemize}
-	\item $\delta(q,a,x) = \left\{(p_1, \gamma_1), \ldots, (p_m, \gamma_m)\right\}$
-	From state $q$, with $a$ in input and $x$ on top of the stack:
-	\begin{enumerate}
-		\item consumes $a$ from the input string;
-		\item goes to a state $p_i$ and replace $x$ with $\gamma_i$ (the first symbol of $\gamma_i$ goes on top of the stack).
-	\end{enumerate}
-	\item $\delta(q,\varepsilon,x) = \left\{(p_1, \gamma_1), \ldots, (p_m, \gamma_m)\right\}$
-	From state $q$, with $x$ on top of the stack:
-	\begin{enumerate}
-		\item no input symbol is consumed;
-		\item goes to a state $p_i$ and replaces $x$ with $\gamma_i$ (the first symbol of the stack).
-	\end{enumerate}
+    \item $\delta(q,a,x) = \left\{(p_1, \gamma_1), \ldots, (p_m, \gamma_m)\right\}$
+    From state $q$, with $a$ in input and $x$ on top of the stack:
+    \begin{enumerate}
+        \item consumes $a$ from the input string;
+        \item goes to a state $p_i$ and replace $x$ with $\gamma_i$ (the first symbol of $\gamma_i$ goes on top of the stack).
+    \end{enumerate}
+    \item $\delta(q,\varepsilon,x) = \left\{(p_1, \gamma_1), \ldots, (p_m, \gamma_m)\right\}$
+    From state $q$, with $x$ on top of the stack:
+    \begin{enumerate}
+        \item no input symbol is consumed;
+        \item goes to a state $p_i$ and replaces $x$ with $\gamma_i$ (the first symbol of the stack).
+    \end{enumerate}
 \end{itemize}
 
 \subsection{Languages Accepted by a PDA}
 Language accepted by final state by PDA:
 $$
-	P = (Q, \Sigma, \Gamma, \delta, q_0, Z_0, F)
+    P = (Q, \Sigma, \Gamma, \delta, q_0, Z_0, F)
 $$
 $$
-	L(P) = \left\{w \middle| w \in \Sigma^\ast; (q_0, w, Z_0) \to^\ast (q, \varepsilon, \alpha); q \in F \right\}
+    L(P) = \left\{w \middle| w \in \Sigma^\ast; (q_0, w, Z_0) \to^\ast (q, \varepsilon, \alpha); q \in F \right\}
 $$
 Language accepted by empty stack by the PDA:
 $$
-	P = (Q, \Sigma, \Gamma, \delta, q_0, Z_0, \emptyset)
+    P = (Q, \Sigma, \Gamma, \delta, q_0, Z_0, \emptyset)
 $$
 $$
-	N(P) = \left\{w \middle| w \in \Sigma^\ast; (q_0, w, Z_0) \to^\ast (q, \varepsilon, \varepsilon) \right\}
+    N(P) = \left\{w \middle| w \in \Sigma^\ast; (q_0, w, Z_0) \to^\ast (q, \varepsilon, \varepsilon) \right\}
 $$
 
 \subsection{PDA Languages $\equiv$ Context-Free Languages}
 Let $G = (N, T, P, S)$ be a context-free grammar; let us construct a $PDA = (\left\{q\right\}, T, \Gamma, \delta, q, S, \emptyset)$ where:
 \begin{itemize}
-	\item $\Gamma = N \cup T$;
-	\item $\delta = \begin{Bmatrix}
-		\delta(q, \varepsilon, A) = \left\{(q, \alpha) \quad \text{for each} \quad A \to \alpha \in P \right\} \\
-		\delta(q, a, a) = \left\{(q, \varepsilon) \quad \text{for each} \quad a \in T \right\}
-		\end{Bmatrix}$
+    \item $\Gamma = N \cup T$;
+    \item $\delta = \begin{Bmatrix}
+        \delta(q, \varepsilon, A) = \left\{(q, \alpha) \quad \text{for each} \quad A \to \alpha \in P \right\} \\
+        \delta(q, a, a) = \left\{(q, \varepsilon) \quad \text{for each} \quad a \in T \right\}
+        \end{Bmatrix}$
 \end{itemize}
 PDA accepts $L(G)$ by empty stack, making a sequence of transitions corresponding to a leftmost derivation.

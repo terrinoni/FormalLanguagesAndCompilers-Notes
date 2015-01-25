@@ -1,14 +1,37 @@
 The advanced usage of CUP in this chapter includes:
 \begin{itemize}
-	\item
-	grammars with ambiguities;
-	\item
-	lists;
-	\item
-	operator precedence;
-	\item
-	handling syntax errors.
+    \item
+    grammars with ambiguities;
+    \item
+    lists;
+    \item
+    operator precedence;
+    \item
+    handling syntax errors.
 \end{itemize}
 
 \section{Ambiguous Grammars in CUP}
-Conflicts can arise
+Conflicts can arise when the grammar is ambiguous; this implies that the parser must choose between two or more alternative actions.
+The problem can be resolved by modifying the grammar (in order to make it non-ambiguous) or by instructing the parser on how to handle ambiguity.
+The latter option requires that the parsing algorithm is fully understood, in order to avoid unwanted/wrong behaviors.
+
+A grammar is ambiguous if there is at least one sequence of symbols for which two or more distinct parse trees exist.
+Example:
+\begin{lstlisting}
+import java.io.*;
+
+public class Main {
+    static public void main(String argv[]) {
+        try {
+            // instantiate the scanner and open input file argv[0]
+            Yylex L = new Yylex(new FileReader(argv[0]));
+            // instantiate the parser
+            Parser p = new Parser(L);
+            // start the parser
+            Object result = p.parse();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+\end{lstlisting}
