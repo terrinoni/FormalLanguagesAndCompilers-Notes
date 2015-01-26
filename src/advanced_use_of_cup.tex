@@ -106,7 +106,7 @@ Rules:
     \code{S :: = b}
 \end{enumerate}
 The input is the following:
-\begin{lstlisting}[mathescape]
+\begin{lstlisting}
 a b
 \end{lstlisting}
 The next token is \code{EOF}.
@@ -120,18 +120,84 @@ Two possible actions:
     \item
     reduce the first two top elements of the stack (rule 3);
     \begin{figure}[H]
-        \centerline{\includegraphics[width=0.6\textwidth]{img/25.pdf}}
+        \centerline{\includegraphics[width=0.17\textwidth]{img/25.pdf}}
     \end{figure}
     \item
     reduce the first top element of the stack (rule 4);
     \begin{figure}[H]
-        \centerline{\includegraphics[width=0.6\textwidth]{img/26.pdf}}
+        \centerline{\includegraphics[width=0.17\textwidth]{img/26.pdf}}
     \end{figure}
 \end{enumerate}
 CUP can perform a reduction using the first defined rule (rule 3)\footnote{Simply because of rule order: rule 3 comes first than rule 4.}.
 
 \section{Lists}
 \subsubsection{Examples with Lists}
+\begin{enumerate}
+    \item
+    List with at least one element \code{E}.
+    \begin{lstlisting}
+LIST ::= LIST E
+    | E;
+    \end{lstlisting}
+    Parse tree:
+    \begin{figure}[H]
+        \centerline{\includegraphics[width=0.25\textwidth]{img/27.pdf}}
+    \end{figure}
+    \item
+    List of elements that can be empty.
+    \begin{lstlisting}[mathescape]
+LISTE ::= $\varepsilon$
+    | LIST;
+LIST ::= LIST E
+    | $\varepsilon$;
+    \end{lstlisting}
+    Parse trees:
+    \begin{figure}[H]
+        \centerline{\includegraphics[width=0.6\textwidth]{img/28.pdf}}
+    \end{figure}
+    \item
+    List of elements that can be empty.
+    \begin{lstlisting}[mathescape]
+LIST ::= LIST E
+    | $\varepsilon$;
+    \end{lstlisting}
+    Parse trees:
+    \begin{figure}[H]
+        \centerline{\includegraphics[width=0.6\textwidth]{img/29.pdf}}
+    \end{figure}
+    \item
+    List of elements that can be empty (this example is actually incorrect).\footnote{It is ambiguous; see the two available ``three elements'' parse threes.}
+    \begin{lstlisting}[mathescape]
+LIST ::= LIST E
+    | E
+    | $\varepsilon$;
+    \end{lstlisting}
+    Parse trees:
+    \begin{figure}[H]
+        \centerline{\includegraphics[width=0.8\textwidth]{img/30.pdf}}
+    \end{figure}
+    \item
+    List of at least three elements.
+    \begin{lstlisting}
+LIST ::= LIST E
+    | E E E;
+    \end{lstlisting}
+    Parse tree:
+    \begin{figure}[H]
+        \centerline{\includegraphics[width=0.35\textwidth]{img/31.pdf}}
+    \end{figure}
+    \item
+    List of at least three elements in a odd number.
+    \begin{lstlisting}
+LIST ::= LIST E E
+    | E E E;
+    \end{lstlisting}
+    Parse tree:
+    \begin{figure}[H]
+        \centerline{\includegraphics[width=0.4\textwidth]{img/32.pdf}}
+    \end{figure}
+\end{enumerate}
+
 
 \section{Precedence Section: Ambiguous Grammars}
 
