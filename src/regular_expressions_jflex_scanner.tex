@@ -195,7 +195,7 @@ A state is active until another state is activated.
 To return to the initial condition, one must activate the initial state by means of the statement \code{yybegin(YYINITIAL);}.
 A rule can be preceded by one or more state names, separated by a comma, to indicate that it is active in each of the states.
 Example:
-\begin{lstlisting}
+\begin{lstlisting}[frame=single]
 %%
 %state comment
 %%
@@ -216,7 +216,7 @@ When the scanner enters in an exclusive state:
 In this way, ``mini-scanner'' that deals with special sections of the input stream, such as comments or strings, can be defined.
 The \code{\%xstate} keyword defines an exclusive state.
 Example: this scanner recognizes and eliminates C comments, while counting the number of lines.
-\begin{lstlisting}
+\begin{lstlisting}[frame=single]
 %%
 %standalone
 %xstate comment

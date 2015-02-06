@@ -169,7 +169,7 @@ Note that the use of the ``\code{\|}'' character generates two separated rules.
 It is important to remember that the code between ``\code{\{:}'' and ``\code{:\}}'' is executed only when a given rule is matched.
 
 Example:
-\begin{lstlisting}
+\begin{lstlisting}[frame=single]
 // terminals - non-terminals section
 terminal T, P, ID, NUM, S, CM, SO, SC;
 non terminal D, V, VL, Va;
@@ -220,7 +220,7 @@ Example: if in the parser the following list of terminal symbols has been declar
 terminal T, P, ID, NUM, PV, CM, SO, SC, S;
 \end{lstlisting}
 they can be used inside the scanner and passed to the parser in the following way:
-\begin{lstlisting}
+\begin{lstlisting}[frame=single]
 ...
 %%
 ...
@@ -234,7 +234,7 @@ they can be used inside the scanner and passed to the parser in the following wa
 It includes the CUP library (\code{java.cup.runtime.*}) in the code section; it also activates CUP compatibility by means of the \code{\% cup} directive in the declaration section.
 
 Example:
-\begin{lstlisting}
+\begin{lstlisting}[frame=single]
 ...
 %%
 % cup
@@ -246,7 +246,7 @@ Example:
 
 \subsection{The CUP Parser}
 Example:
-\begin{lstlisting}
+\begin{lstlisting}[frame=single]
 import java_cup.runtime.*;
 
 terminal EL, CM;
@@ -270,7 +270,7 @@ LIST ::= EL
 
 \subsection{Main File (\code{Main.java})}
 Example:
-\begin{lstlisting}
+\begin{lstlisting}[frame=single]
 import java.io.*;
 
 public class Main {
