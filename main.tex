@@ -1,12 +1,12 @@
 \documentclass[pdfa,cucitura]{toptesi}
 \hypersetup{%
-	pdfpagemode={UseOutlines},
-	bookmarksopen,
-	pdfstartview={FitH},
-	colorlinks,
-	linkcolor={blue},
-	citecolor={red},
-	urlcolor={blue}
+    pdfpagemode={UseOutlines},
+    bookmarksopen,
+    pdfstartview={FitH},
+    colorlinks,
+    linkcolor={blue},
+    citecolor={red},
+    urlcolor={blue}
 }
 
 \usepackage[latin1]{inputenc}
@@ -49,13 +49,13 @@
 \expandafter\ifx\csname StileTrieste\endcsname\relax
 %\frontespizio
 \else
-	\paginavuota
-	\begin{dedica}
-		To my grandparents
+    \paginavuota
+    \begin{dedica}
+        To my grandparents
 
-		\textdagger\ You will always live in my memories
-	\end{dedica}
-	\tomo
+        \textdagger\ You will always live in my memories
+    \end{dedica}
+    \tomo
 \fi
 
 \sommario
@@ -107,36 +107,7 @@
 \input{src/advanced_use_of_cup.tex}
 
 \chapter{CUP \& Semantic}
-\section{The Symbol Class}
-
-\subsection{Passing Semantic Values to the Parser}
-
-\section{Specifying Nodes Types}
-
-\section{Using Semantic Values}
-
-\section{Action and RESULT}
-
-\subsection{Calculating Synthesized Attributes}
-
-\section{Parser Debugging}
-
-\section{Inherited Attributes}
-
-\section{L-Attribute Grammar}
-
-\subsection{Calculating Inherited Attributes}
-
-\subsubsection{Calculating Inherited Attributes by means of Markers}
-
-\section{Intermediate Actions}
-
-\section{Transforming the Grammar}
-
-\section{Handling Semantic Errors}
-
-
-
+\input{src/cup_semantic.tex}
 
 \chapter{Type-Checking}
 
