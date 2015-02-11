@@ -160,12 +160,103 @@ func ::= Identifier:a TO Args:b TC {:
 \end{lstlisting}
 
 \section{Parser Debugging}
+A series of options are available in CUP to visualize the parser's internal structures:
+\begin{itemize}
+    \item
+    \code{-dump_grammar} prints the list of terminals, non-terminals, and productions;
+    \item
+    \code{-dump_states} prints the states graph;
+    \item
+    \code{-dump_table} prints the action table and the reduce table;
+    \item
+    \code{-dump} prints all the information.
+\end{itemize}
+The parser can be executed in debug mode (all the actions performed to analyze the input sequence are printed).
+
+Example:
+
+Normal mode:
+\begin{lstlisting}
+                        Yylex l = new Yylex(new FileReader(file));
+                        parser p = new parser(l);
+                        Object result = p.parse();
+\end{lstlisting}
+
+$$
+\Downarrow
+$$
+
+Debug mode:
+\begin{lstlisting}
+                        Yylex l = new Yylex(new FileReader(file));
+                        parser p = new parser(l);
+                        Object result = p.debug_parse();
+\end{lstlisting}
 
 \section{Inherited Attributes}
+Inherited attributes are useful to express the dependency of a production on its context.
+
+Example:
+\begin{lstlisting}
+a,b: int;
+\end{lstlisting}
+\begin{align*}
+& D \to L \, ':' \, T \, ';' \\
+& L \to L_1 \, ',' \, id \\
+& L \to id \\
+& T \to 'integer'
+\end{align*}
+\begin{lstlisting}
+L.type = T.type
+L1.type = L.type; new_var(id.name, L.type)
+new_val(id.name, L.type)
+T.type = type_int
+\end{lstlisting}
 
 \section{L-Attribute Grammar}
+The order in which attributes are evaluated depends on the order in which the parse tree is created ir visited.
+Usually, parser follows the same order of the depth-first visit algorithm.\footnote{\url{http://en.wikipedia.org/wiki/Depth-first_search}}
+
+An L-Attribute grammar is defined as a grammar whose attributes values can be calculated by means of a depth-first visit of the parse tree.
+In these grammars, information propagates from left to right (within the parse tree).
+In the previous example, the grammar is not an L-Attribute grammar (information propagates from right to left); CUP manages only L-Attributes grammar.
+
+Example:
+\begin{lstlisting}
+int a, b;
+\end{lstlisting}
+\begin{align*}
+& D \to T \, L \, ';' \\
+& L \to L_1 \, ';' \, id \\
+& L \to id \\
+& T \to 'int'
+\end{align*}
+\begin{lstlisting}
+L.type = T.type
+L1.type = L.type; new_var(id.name, L.type)
+new_val(id.name, L.type)
+T.type = type_int
+\end{lstlisting}
 
 \subsection{Calculating Inherited Attributes}
+In a bottom-up parser, memory is not allocated in the semantic stack until the corresponding symbol is recognized.
+This is a troublesome for handling inherited attributes.
+If the grammar is an L-Attribute one, and the semantic rules for inherited attributes are copy-rules, the issue can be tackled in a relatively simple way.
+If rules are more complex than this, it is possible to use \emph{markers} (non-terminals that are expanded with $\varepsilon$ symbol).
+
+Example: a production with a copy-rule.
+\begin{align*}
+& D \to T \, lid \, S \\
+& lid = ID
+\end{align*}
+\begin{lstlisting}
+lid.type = T.type
+var(ID.name, lid.type)
+\end{lstlisting}
+Stack before \code{lid} is reduced:
+%\begin{figure}[H]
+%    \centerline{\includegraphics[width=0.4\textwidth]{img/33.pdf}}
+%\end{figure}
 
 \subsubsection{Calculating Inherited Attributes by means of Markers}
 
