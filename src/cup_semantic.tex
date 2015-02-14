@@ -214,7 +214,7 @@ T.type = type_int
 \end{lstlisting}
 
 \section{L-Attribute Grammar}
-The order in which attributes are evaluated depends on the order in which the parse tree is created ir visited.
+The order in which attributes are evaluated depends on the order in which the parse tree is created or visited.
 Usually, parser follows the same order of the depth-first visit algorithm.\footnote{\url{http://en.wikipedia.org/wiki/Depth-first_search}}
 
 An L-Attribute grammar is defined as a grammar whose attributes values can be calculated by means of a depth-first visit of the parse tree.
@@ -254,14 +254,232 @@ lid.type = T.type
 var(ID.name, lid.type)
 \end{lstlisting}
 Stack before \code{lid} is reduced:
-%\begin{figure}[H]
-%    \centerline{\includegraphics[width=0.4\textwidth]{img/33.pdf}}
-%\end{figure}
+\begin{figure}[H]
+    \centerline{\includegraphics[width=0.3\textwidth]{img/33.pdf}}
+\end{figure}
+
+To access to the semantic values stored in the stack in a given position, use the function \code{Object stack(int position)}.
+\begin{itemize}
+    \item
+    \code{stack(0)} is the semantic value associated with the symbol in the top of the stack;
+    \item
+    \code{stack(n)} is the semantic value associated with the symbol in the position \code{top + n} of the stack.
+\end{itemize}
+
+\begin{lstlisting}
+parser code {:
+    public Object stack(int position) {
+        // returns the object at the specified position from the top of the stack
+        return(((Symbol) stack.elementAt(top + position)).value);
+    }
+:}
+\end{lstlisting}
+
+Example:
+\begin{figure}[H]
+    \centerline{\includegraphics[width=0.3\textwidth]{img/34.pdf}}
+\end{figure}
+The \code{type} attribute of \code{lid} is inherited.
+Its value is present in the semantic stack (at position ``\code{T}'') before \code{lid} is created.
+However, it is beyond the semantic scope of the \code{lid} production.
+With the assumption that the \code{lid} symbol is always preceded by a type identifier:
+\begin{lstlisting}
+lid ::= ID.name {:
+    String type = (String) parser.stack(-1);
+    RESULT = new String(type);
+    add_id(name, RESULT);
+:};
+\end{lstlisting}
+Stack:
+\begin{figure}[H]
+    \centerline{\includegraphics[width=0.3\textwidth]{img/33.pdf}} %same picture, no need for a new graph
+\end{figure}
 
 \subsubsection{Calculating Inherited Attributes by means of Markers}
+Example:
+\begin{figure}[H]
+    \centerline{\includegraphics[width=0.4\textwidth]{img/35.pdf}}
+\end{figure}
+If the rule ``\code{lid ::= ID CM lid}'' is added, it is not true anymore that \code{lid} is always preceded by a type identifier.
+In the case of the rule ``\code{lid ::= ID;}'' the symbol preceding \code{ID} in the sack before reducing is \code{CM} and not the type.
+
+By adding an empty rule (\emph{marker}), one can ensure that the rule ``\code{lid ::= ID}'' is preceded by a type semantic value (the marker is used to move a semantic value in a desired position in the stack).
+Note that in order to have easier semantic actions is always better to have left recursive lists:\footnote{Anyhow, in some grammars, also using recursive left-recursive lists, markers are needed.}
+\begin{lstlisting}
+lid ::= lid CM ID
+    | ID;
+\end{lstlisting}
+
+Example:
+\begin{lstlisting}
+lid ::= {:
+    RESULT = (String) parser.stack(-1);
+    add_id(name, RESULT);
+:};
+
+lid ::= ID:name CM Empty Lid {:
+    RESULT = (String) parser.stack(-1);
+    add_id(name, RESULT);
+:};
+
+Empty ::= {:
+    RESULT = (String) parser.stack(-2);
+:};
+\end{lstlisting}
 
 \section{Intermediate Actions}
+In order to avoid explicitly introducing a non-terminal with an empty production, one can use in the right-hand side of the production an \emph{intermediate action}.
+Intermediate actions are automatically substituted with a non-terminal symbol, which in turn is given by an empty production.
+
+Example: the following code
+\begin{lstlisting}
+lid ::= ID:name CM Empty lid;
+
+Empty ::= ;
+\end{lstlisting}
+can be rewritten as
+\begin{lstlisting}
+lid ::= ID:name CM {:
+        RESULT = (String) parser.stack(-2);
+    :} lid {:
+        RESULT = (String) parser.stack(-1);
+        add_id(name, RESULT);
+    :};
+\end{lstlisting}
+
+Example: marker
+
+Parser
+\begin{lstlisting}[frame=single]
+import java_cup.runtime.*;
+
+%%
+
+%cup
+%unicode
+
+NL = \n|\r|\r\n
+ID = [a-zA-Z][a-zA-Z0-9]*
+TYPE = int|float|char|double
+
+%%
+
+"," {
+    return new Symbol(sym.CM);
+}
+
+";" {
+    return new Symbol(sym.S);
+}
+
+{TYPE} {
+    return new Symbol(sym.TYPE, new String(yytext()));
+}
+
+{ID} {
+    return new Symbol(sym.ID, new String(yytext()));
+}
+
+{NL}|" "|\t {
+    ;
+}
+\end{lstlisting}
+Scanner
+\begin{lstlisting}[frame=single]
+import java_cup.runtime.*;
+
+parser code {:
+    // returns semantic value of symbol in position "position"
+    public Object stack(int position) {
+        return (((Symbol) stack.elementAt(tos + position)).value);
+    }
+:};
+
+terminal VIR, PV;
+terminal String TYPE, ID;
+
+non terminal goal, list_decl;
+non terminal String decl, lid;
+
+start with goal;
+
+goal ::= {:
+    System.out.println("Parser: recognized grammar");
+:};
+
+list_decl ::=
+    | list_decl decl;
+
+decl ::= TYPE lid:x PV {:
+    System.out.println("Parser: found declaration of type: " + x);
+:};
+
+lid ::= ID:name VIR {:
+        RESULT = (String) parser.stack(-2);
+    :} lid {:
+        RESULT = (String) parser.stack(-1);
+        System.out.println("Parser: var(" + name +", " + RESULT +")");
+    :};
+\end{lstlisting}
 
 \section{Transforming the Grammar}
+It is possible to avoid using inherited attributes by transforming the grammar.
+
+Example:
+\begin{align*}
+    D &\to L \, ';' \, T\\
+    T &\to int \, | \, float\\
+    L &\to L \, ',' \, id \, | \, id\\
+    \\
+    & \qquad \Downarrow\\
+    \\
+    D &\to id \, L\\
+    L &\to ',' \, id \, L \, | \, ':' \, T\\
+    T &\to int \, | \, float
+\end{align*}
 
 \section{Handling Semantic Errors}
+Semantic errors are usually handled in the actions associated to productions.
+Usually actions verify that:
+\begin{itemize}
+    \item
+    operands types are compatible;
+    \item
+    variables and functions are declared;
+    \item
+    parameters passed to a function are coherent with the function prototype.
+\end{itemize}
+
+\subsubsection{Intermediate Code Generation: the \code{while} statement}
+As an example of intermediate code generation, a simple \code{while} statement
+\begin{lstlisting}
+while_c ::= WHILE (a > 0) {% STMT %}
+\end{lstlisting}
+can be translated in the following intermediate code:
+\begin{lstlisting}
+L0: EVAL COND
+    GOTOF L1
+    STMT
+    GOTO L0
+L1:
+\end{lstlisting}
+where \code{GOTOF} is a jump instruction\footnote{In the x86 assembly language, the \code{JMP} instruction performs an unconditional jump. Such an instruction transfers the flow of execution by changing the instruction pointer register.} executed only if the result of the above \code{eval} command is 0 (\code{false}).
+\code{L0} and \code{L1} are labels.
+
+A possible solution of the while problem that uses inherited attributes is:
+\begin{lstlisting}
+while_c ::= WHILE cond NT0:x STMT {:
+    Integer[] I = x;
+    System.out.println("GOTO L" + I[0]);
+    System.out.println("L" + I[1] + ":");
+:};
+
+NT0 ::= {:
+    RESULT = new Integer[2];
+    RESULT[0] = genLabel(); // L0
+    RESULT[1] = genLabel(); // L1
+    System.out.println("L" + RESULT[0] + ";");
+    System.out.println("EVAL " + parser.stack(0));
+    System.out.println("GOTOF L" + RESULT[1]);
+:};
+\end{lstlisting}
