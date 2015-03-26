@@ -36,6 +36,46 @@ $$
 This automaton is already minimum.
 
 \paragraph{Exercise 2}
+Verify the equivalence between the following grammars:
+\begin{enumerate}
+    \item
+    $S \to Aa \; | \; Ab \; | \; Sb \; | \; a \; | \; b$ \newline
+    $A \to Sa$
+    \item
+    $S \to aA \; | \; bA \; | \; a \; | \; b$ \newline
+    $A \to aS \; | \; bA \; | \; b$
+\end{enumerate}
+
+\begin{enumerate}
+    \item
+    Left regular grammar
+    \begin{figure}[H]
+        \centerline{\includegraphics[width=0.4\textwidth]{img/44.pdf}}
+    \end{figure}
+    $$
+        \{I', A', S\}; \{S', B\}
+    $$
+    % \begin{figure}[H]
+    %     \centerline{\includegraphics[width=0.3\textwidth]{img/45.pdf}}
+    % \end{figure}
+    \item
+    Right regular grammar
+    % \begin{figure}[H]
+    %     \centerline{\includegraphics[width=0.3\textwidth]{img/46.pdf}}
+    % \end{figure}
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{l|l|l}
+            & a & b \\ \hline
+            S & A, $\Omega$ & A, $\Omega$ \\ \hline
+            A, $\Omega$ & S & A, $\Omega$ \\
+        \end{tabular}
+    \end{table}
+    % \begin{figure}[H]
+    %     \centerline{\includegraphics[width=0.3\textwidth]{img/47.pdf}}
+    % \end{figure}
+\end{enumerate}
+
 \paragraph{Exercise 3}
 \paragraph{Exercise 4}
 \paragraph{Exercise 5}
